@@ -30,17 +30,14 @@ struct Edge {
     : to (_to), rd (_rd), next (_next) {}
 };
 
-// all vertex numbers are zero-based
+// all vertex numbers should be zero-based
 int N, M;
 int head_orig[MAX_N];  // head[v] is a -1 ending linked-list of edges
 int head[MAX_N];  // to be changed during DFS
-Edge E[MAX_M];    // every edge (starting from 0) is followed by its reverse edge with odd number
+Edge E[MAX_M];    // every edge (starting from E[0]) is followed by its reverse edge with odd index
 int source, sink;
 
-// lvl[v] -- edge distance from v to sink, or
-//           -1 for sink unreachable, or
-//           -2 for no more augmenting paths to sink
-int lvl[MAX_N];
+int lvl[MAX_N]; // lvl[v] -- edge distance from v to sink, or -1 if no path to sink
 int path[MAX_N], path_len;  // list of edges of the current flow
 
 // added a new edge from a to b with residual flow c

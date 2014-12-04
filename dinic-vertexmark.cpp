@@ -34,7 +34,7 @@ struct Edge {
 // all vertex numbers are zero-based
 int N, M;
 int head[MAX_N];  // head[v] is a -1 ending linked-list of edges
-Edge E[MAX_M];    // every edge (starting from 0) is followed by its reverse edge with odd number
+Edge E[MAX_M];    // every edge (starting from E[0]) is followed by its reverse edge with odd index
 int source, sink;
 
 // lvl[v] -- edge distance from v to sink, or

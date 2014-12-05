@@ -17,7 +17,7 @@ using namespace std;
 typedef long long flow_t;
 
 const int     MAX_N = 500;
-const int     MAX_M = 2*(10000);  // 2x for the reversed edges
+const int     MAX_M = 2*10000;  // 2x for the reversed edges
 const flow_t  MAX   = 1e9 + 5;  // max total flow value
 
 struct Edge {
@@ -92,7 +92,7 @@ flow_t dfs(int v) {
   if (v == target)
     return MAX;
 
-  for (int i = head[v]; i != -1; i = head[v] = E[i].next)
+  for (int i = ptr[v]; i != -1; i = ptr[v] = E[i].next)
     if (lvl[E[i].to] == lvl[v] - 1 && E[i].rd > 0) {
       path[path_len++] = i;
       if (flow_t tmp = dfs(E[i].to))

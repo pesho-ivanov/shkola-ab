@@ -48,8 +48,8 @@ void add_edge(int from, int to, flow_t cap) {
 }
 
 void input() {
-  int a, b;
-  flow_t c;
+  int from, to;
+  flow_t rd;
 
   cin >> N >> M;
   source = 0;
@@ -57,11 +57,11 @@ void input() {
 
   fill(head, head+N, -1);
   for (int i = 0; i < M; ++i) {
-    cin >> a >> b >> c;
-    --a; --b;  // to zero-based vertex numbers
+    cin >> from >> to >> rd;
+    --from; --to;  // to zero-based vertex numbers
 
-    add_edge(a, b, c);  // direct edge with c initial residual flow
-    add_edge(b, a, 0);  // reverse edge with no initial residual flow
+    add_edge(from, to, rd);  // direct edge with c initial residual flow
+    add_edge(to, from, 0);   // reverse edge with no initial residual flow
   }
 }
 

@@ -30,15 +30,15 @@ struct Edge {
     : to (_to), rd (_rd), next (_next) {}
 };
 
-// all vertex numbers should be zero-based
 int N, M;
-int head[MAX_N];  // head[v] is a -1 ending linked-list of edges
-int ptr[MAX_N];   // ptr[v] starts equal to head[v] but skips edges which don't lead to target
-Edge E[MAX_M];    // every edge (starting from E[0]) is followed by its reverse edge with odd index
-int source, target;
+int source, target;  // all vertex numbers should be zero-based
 
-int lvl[MAX_N]; // lvl[v] -- edge distance from v to target, or -1 if no path to target
-int path[MAX_N], path_len;  // list of edges of the current flow
+int head[MAX_N];  // head[v] is a -1 ending linked-list of edges
+Edge E[MAX_M];    // every edge (starting from E[0]) is followed by its reverse edge with odd index
+
+int lvl[MAX_N];  // lvl[v] -- # of edges from v to target, or -1 if no path exists
+int ptr[MAX_N];  // like head[] but skips edges which didn't lead to target
+int path[MAX_N], path_len;  // list of edges of the current augmenting path
 
 // added a new edge from a to b with residual flow c
 void add_edge(int from, int to, flow_t cap) {
@@ -65,7 +65,8 @@ void input() {
   }
 }
 
-// compute lvl[v] starting from target to all vertices through the reversed edges
+// compute lvl[v] spreading from target going through the reversed edges
+// so lvl[v] is the shortest edge-distance from v to target
 // returns whether there is a path from source to target
 bool bfs() {
   queue<int> Q;
@@ -93,6 +94,7 @@ flow_t dfs(int v) {
     return MAX;
 
   for (int i = ptr[v]; i != -1; i = ptr[v] = E[i].next)
+    // move only to a closer vertex to target so that a shortest path is found
     if (lvl[E[i].to] == lvl[v] - 1 && E[i].rd > 0) {
       path[path_len++] = i;
       if (flow_t tmp = dfs(E[i].to))
@@ -106,14 +108,15 @@ flow_t dfs(int v) {
 flow_t dinitz() {
   flow_t maxflow = 0, cflow;
 
-  // no more than N iteration
+  // no more than N phases of BFS
   while (bfs()) {
     copy(head, head+N, ptr);
 
     // while cflow > 0 <=> augmenting path is found
     while (path_len = 0, cflow = dfs(source)) {
       maxflow += cflow;
-      // let the max possible flow go through the current path
+
+      // let the max possible flow go through the augmenting path found
       for (int i = 0; i < path_len; ++i) {
         E[path[i]].rd -= cflow;
         E[path[i] ^ 1].rd += cflow;

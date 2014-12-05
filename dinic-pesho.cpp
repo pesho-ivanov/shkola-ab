@@ -17,7 +17,7 @@ using namespace std;
 typedef long long flow_t;
 
 const int     MAX_N = 500;
-const int     MAX_M = 2*10000;  // 2x for the reversed edges
+const int     MAX_M = 2 * 10000;  // 2x for the reversed edges
 const flow_t  MAX   = 1e9 + 5;  // max total flow value
 
 struct Edge {
@@ -41,10 +41,10 @@ int lvl[MAX_N]; // lvl[v] -- edge distance from v to target, or -1 if no path to
 int path[MAX_N], path_len;  // list of edges of the current flow
 
 // added a new edge from a to b with residual flow c
-void add_edge(int a, int b, flow_t c) {
-  static int br = 0;
-  E[br] = Edge(b, c, head[a]);
-  head[a] = br++;
+void add_edge(int from, int to, flow_t cap) {
+  static int E_len = 0;
+  E[E_len] = Edge(to, cap, head[from]);
+  head[from] = E_len++;
 }
 
 void input() {
@@ -126,7 +126,7 @@ flow_t dinitz() {
 
 int main () {
   input();
-  cout << dinitz();
+  cout << dinitz() << endl;
 
   return 0;
 }

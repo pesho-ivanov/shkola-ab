@@ -33,7 +33,7 @@ struct Edge {
 int N, M;
 int source, target;  // all vertex numbers should be zero-based
 
-int head[MAX_N];  // head[v] is a -1 ending linked-list of edges
+int head[MAX_N];  // head[v] points to the first edge of a linked list of the edges starting at v; the value -1 indicates the end of the list
 Edge E[MAX_M];    // every edge (starting from E[0]) is followed by its reverse edge with odd index
 
 int lvl[MAX_N];  // lvl[v] -- # of edges from v to target, or -1 if no path exists

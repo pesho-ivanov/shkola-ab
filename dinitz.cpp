@@ -105,22 +105,26 @@ flow_t dfs(int v) {
   return 0;
 }
 
+// propagate the max possible flow through the current augmenting path
+void update_graph(flow_t cflow) {
+  for (int i = 0; i < path_len; ++i) {
+    E[path[i]].rd -= cflow;
+    E[path[i] ^ 1].rd += cflow;
+  }
+}
+
 flow_t dinitz() {
   flow_t maxflow = 0, cflow;
 
-  // no more than N phases of BFS
+  // every consequitive BFS finds strictly longer shortest paths
+  // so there are no more than N phases of BFS
   while (bfs()) {
     copy(head, head+N, ptr);
 
-    // while cflow > 0 <=> augmenting path is found
+    // cflow > 0 <=> augmenting path is found
     while (path_len = 0, cflow = dfs(source)) {
       maxflow += cflow;
-
-      // let the max possible flow go through the augmenting path found
-      for (int i = 0; i < path_len; ++i) {
-        E[path[i]].rd -= cflow;
-        E[path[i] ^ 1].rd += cflow;
-      }
+      update_graph(cflow);
     }
   }
 

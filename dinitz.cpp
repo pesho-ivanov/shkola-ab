@@ -22,7 +22,7 @@ const flow_t  MAX   = 1e9 + 5;  // max total flow value
 
 struct Edge {
   int to;     // ending vertex of an oriented edge
-  flow_t rd;  // residual flow
+  flow_t rd;  // residual capacity -- updated after finding an augmenting path
   int next;   // the index of the next Edge in E
 
   Edge() {}
@@ -93,12 +93,12 @@ flow_t dfs(int v) {
   if (v == target)
     return MAX;
 
-  for (int i = ptr[v]; i != -1; i = ptr[v] = E[i].next)
+  for (int e = ptr[v]; e != -1; e = ptr[v] = E[e].next)
     // move only to a closer vertex to target so that a shortest path is found
-    if (lvl[E[i].to] == lvl[v] - 1 && E[i].rd > 0) {
-      path[path_len++] = i;
-      if (flow_t tmp = dfs(E[i].to))
-        return min(tmp, E[i].rd);
+    if (lvl[E[e].to] == lvl[v] - 1 && E[e].rd > 0) {
+      path[path_len++] = e;
+      if (flow_t tmp = dfs(E[e].to))
+        return min(tmp, E[e].rd);
       --path_len;
     }
 

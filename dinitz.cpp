@@ -14,11 +14,11 @@ AUTHOR: Petar Ivanov <peter.ivanov89@gmail.com>
 #include<queue>
 using namespace std;
 
-typedef long long flow_t;
+typedef long long flow_t;  // flow_t will contain the total flow <= #augmenting_paths * flow_of_one_augmenting_path < MAX_M*MAX
 
 const int     MAX_N = 500;
 const int     MAX_M = 2 * 10000;  // 2x for the reversed edges
-const flow_t  MAX   = 1e9 + 5;  // max total flow value
+const flow_t  MAX   = 1e9 + 5;  // max flow through one augmenting path
 
 struct Edge {
   int to;     // ending vertex of an oriented edge
@@ -60,6 +60,7 @@ void input() {
     cin >> from >> to >> rd;
     --from; --to;  // to zero-based vertex numbers
 
+    // adding a *directed* edge; for adding an undirected edge, add (to,from,rd)
     add_edge(from, to, rd);  // direct edge with c initial residual flow
     add_edge(to, from, 0);   // reverse edge with no initial residual flow
   }

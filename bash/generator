@@ -1,0 +1,15 @@
+while [ 1 ]
+do
+ 
+./gene > gen.in
+./$1 < gen.in > ans1
+./$2 < gen.in > ans2
+ 
+if [ "$(cmp ans1 ans2)" != "" ]
+then
+    break;
+fi
+ 
+cat last
+ 
+done
